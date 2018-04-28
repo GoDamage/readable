@@ -9,7 +9,7 @@ class Post extends Component {
     const { postDetails } = this.props;
     return (
       <div className="post">
-        <h1>{postDetails.title}</h1>
+        <h2>{postDetails.title}</h2>
         <p>{postDetails.body}</p>
       </div>
     );

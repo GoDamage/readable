@@ -3,11 +3,17 @@ import { combineReducers } from "redux";
 import {
   SELECT_CATEGORY,
   INVALIDATE_CATEGORY,
+  REQUEST_CATEGORIES,
+  RECEIVE_CATEGORIES,
   REQUEST_POSTS,
   RECEIVE_POSTS
 } from "../actions";
 
 const initialState = {
+  categories: {
+    isFetching: false,
+    names: []
+  },
   category: "",
   posts: {
     isFetching: false,
@@ -20,6 +26,20 @@ function selectedCategory(state = initialState.category, action) {
   switch (action.type) {
     case SELECT_CATEGORY:
       return action.category;
+    default:
+      return state;
+  }
+}
+
+function categories(state = initialState.categories, action) {
+  switch (action.type) {
+    case REQUEST_CATEGORIES:
+      return Object.assign({}, state, { isFetching: true });
+    case RECEIVE_CATEGORIES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        names: action.categories
+      });
     default:
       return state;
   }
@@ -60,6 +80,7 @@ function postsByCategory(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
+  categories,
   postsByCategory,
   selectedCategory
 });

@@ -1,6 +1,60 @@
+@import url("https://fonts.googleapis.com/css?family=Bitter|Raleway");
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Raleway", sans-serif;
   background-color: #41848f;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Bitter", serif;
+}
+
+a {
+  color: #0a1c28;
+}
+
+.header {
+  padding: 1em 2em;
+  background-color: #97c0b7;
+}
+
+.header h1 {
+  margin: 0;
+  margin-bottom: 0.25em;
+}
+
+.menu {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  padding-right: 1em;
+  list-style: none;
+}
+
+.posts {
+  padding: 2em;
+}
+
+.posts > li {
+  list-style: none;
+}
+
+.post {
+  padding: 1em 2em;
+  margin-bottom: 2em;
+  background-color: #eee9d1;
+  border-radius: 0.5em;
+}
+
+.post h2 {
+  margin-top: 0.25em;
 }

@@ -6,6 +6,8 @@ export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";*/
 
 export const SELECT_CATEGORY = "SELECT_CATEGORY";
 export const INVALIDATE_CATEGORY = "INVALIDATE_CATEGORY";
+export const REQUEST_CATEGORIES = "REQUEST_CATEGORIES";
+export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES";
 
 export const REQUEST_POSTS = "REQUEST_POSTS";
 export const RECEIVE_POSTS = "RECEIVE_POSTS";
@@ -21,6 +23,38 @@ export function invalidateCategory(category) {
   return {
     type: INVALIDATE_CATEGORY,
     category
+  };
+}
+
+function requestCategories() {
+  return {
+    type: REQUEST_CATEGORIES
+  };
+}
+
+function receiveCategories(data) {
+  return {
+    type: RECEIVE_CATEGORIES,
+    categories: data.categories.map(category => category)
+  };
+}
+
+export function fetchCategories() {
+  return dispatch => {
+    dispatch(requestCategories());
+
+    return (
+      fetch("http://localhost:3001/categories", {
+        method: "GET",
+        headers: { Authorization: "qwertyuiop" }
+      })
+        .then(
+          res => res.json(),
+          error => console.log("An error occurred.", error)
+        )
+        //.then(data => console.log(data));
+        .then(data => dispatch(receiveCategories(data)))
+    );
   };
 }
 
