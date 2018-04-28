@@ -1,18 +1,15 @@
 import React, { Component } from "react";
-import { fetchPosts } from "../utils/api";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import HomePage from "./HomePage";
 
 class App extends Component {
-  loadPosts = () => {
-    fetchPosts().then(post => console.log(post));
-  };
   render() {
     return (
-      <div className="App">
-        <p>Hello world</p>
-        <button className="loadPosts" onClick={this.loadPosts}>
-          Load Posts
-        </button>
-      </div>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }

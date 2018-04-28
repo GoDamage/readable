@@ -1,0 +1,83 @@
+//import { getPosts } from "../utils/api";
+
+/*export const FETCH_POSTS = "FETCH_POSTS";
+export const FETCH_POSTS_FAILURE = "FETCH_POSTS_FAILURE";
+export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";*/
+
+export const SELECT_CATEGORY = "SELECT_CATEGORY";
+export const INVALIDATE_CATEGORY = "INVALIDATE_CATEGORY";
+
+export const REQUEST_POSTS = "REQUEST_POSTS";
+export const RECEIVE_POSTS = "RECEIVE_POSTS";
+
+export function selectCategory(category) {
+  return {
+    type: SELECT_CATEGORY,
+    category
+  };
+}
+
+export function invalidateCategory(category) {
+  return {
+    type: INVALIDATE_CATEGORY,
+    category
+  };
+}
+
+function requestPosts(category) {
+  return {
+    type: REQUEST_POSTS,
+    category
+  };
+}
+
+function receivePosts(category, data) {
+  return {
+    type: RECEIVE_POSTS,
+    category,
+    posts: data.map(post => post),
+    receivedAt: Date.now()
+  };
+}
+
+export function fetchPosts(category) {
+  return dispatch => {
+    dispatch(requestPosts(category));
+
+    const url =
+      category !== "all"
+        ? `http://localhost:3001/${category}/posts`
+        : "http://localhost:3001/posts";
+
+    return fetch(url, {
+      method: "GET",
+      headers: { Authorization: "qwertyuiop" }
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receivePosts(category, data)));
+  };
+}
+
+function shouldFetchPosts(state, category) {
+  const posts = state.postsByCategory[category];
+  if (!posts) {
+    return true;
+  } else if (posts.isFetching) {
+    return false;
+  } else {
+    return posts.didInvalidate;
+  }
+}
+
+export function fetchPostsIfNeeded(category) {
+  return (dispatch, getState) => {
+    if (shouldFetchPosts(getState(), category)) {
+      return dispatch(fetchPosts(category));
+    } else {
+      return Promise.resolve();
+    }
+  };
+}
