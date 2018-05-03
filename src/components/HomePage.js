@@ -2,8 +2,12 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { fetchPostsIfNeeded, fetchCategories } from "../actions";
-import Post from "./Post";
+import {
+  fetchPostsIfNeeded,
+  fetchCategories,
+  selectCategory
+} from "../actions";
+import PostList from "./PostList";
 
 class HomePage extends Component {
   static propTypes = {
@@ -17,8 +21,20 @@ class HomePage extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    const category = this.props.match.params.category || "all";
     dispatch(fetchCategories());
-    dispatch(fetchPostsIfNeeded("all"));
+    dispatch(selectCategory(category));
+    dispatch(fetchPostsIfNeeded(category));
+  }
+
+  componentDidUpdate(prevProps) {
+    const { dispatch } = this.props;
+    const category = this.props.match.params.category || "all";
+
+    if (category !== prevProps.selectedCategory) {
+      dispatch(selectCategory(category));
+      dispatch(fetchPostsIfNeeded(category));
+    }
   }
 
   render() {
@@ -27,32 +43,30 @@ class HomePage extends Component {
     return (
       <div className="homepage">
         <div className="header">
-          <h1>Readable</h1>
+          <h1>
+            <Link to="/">Readable</Link>
+          </h1>
           <ul className="menu">
             {categoryNames.map(category => (
-              <li>
-                <Link to={`/category/${category.path}`}>{category.name}</Link>
+              <li key={category.path}>
+                <Link to={`/cat/${category.path}`}>{category.name}</Link>
               </li>
             ))}
           </ul>
         </div>
-        <ul className="posts">
-          {items.map(item => (
-            <li key={item.id}>
-              <Post postDetails={item} />
-            </li>
-          ))}
-        </ul>
+        <PostList posts={items} />
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { categories, postsByCategory } = state;
+  const { categories, postsByCategory, selectedCategory } = state;
   const isFetchingCategories = categories["isFetching"] || true;
   const categoryNames = categories["names"] || {};
-  const { isFetching, lastUpdated, items } = postsByCategory["all"] || {
+  const { isFetching, lastUpdated, items } = postsByCategory[
+    selectedCategory
+  ] || {
     isFetching: true,
     items: []
   };

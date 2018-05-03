@@ -11,6 +11,8 @@ export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES";
 
 export const REQUEST_POSTS = "REQUEST_POSTS";
 export const RECEIVE_POSTS = "RECEIVE_POSTS";
+export const REQUEST_POST = "REQUEST_POST";
+export const RECEIVE_POST = "RECEIVE_POST";
 
 export function selectCategory(category) {
   return {
@@ -113,5 +115,36 @@ export function fetchPostsIfNeeded(category) {
     } else {
       return Promise.resolve();
     }
+  };
+}
+
+function requestPost(id) {
+  return {
+    type: REQUEST_POST,
+    id
+  };
+}
+
+function receivePost(id, data) {
+  return {
+    type: RECEIVE_POST,
+    id,
+    data
+  };
+}
+
+export function fetchPost(id) {
+  return dispatch => {
+    dispatch(requestPost(id));
+
+    return fetch(`http://localhost:3001/posts/${id}`, {
+      method: "GET",
+      headers: { Authorization: "qwertyuiop" }
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receivePost(id, data)));
   };
 }

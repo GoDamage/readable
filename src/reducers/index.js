@@ -6,7 +6,9 @@ import {
   REQUEST_CATEGORIES,
   RECEIVE_CATEGORIES,
   REQUEST_POSTS,
-  RECEIVE_POSTS
+  RECEIVE_POSTS,
+  REQUEST_POST,
+  RECEIVE_POST
 } from "../actions";
 
 const initialState = {
@@ -19,6 +21,10 @@ const initialState = {
     isFetching: false,
     didInvalidate: false,
     items: []
+  },
+  currentPost: {
+    isFetching: false,
+    post: {}
   }
 };
 
@@ -79,10 +85,22 @@ function postsByCategory(state = {}, action) {
   }
 }
 
+function post(state = initialState.currentPost, action) {
+  switch (action.type) {
+    case REQUEST_POST:
+      return Object.assign({}, state, { isFetching: true });
+    case RECEIVE_POST:
+      return Object.assign({}, state, { isFetching: false, post: action.data });
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
   categories,
   postsByCategory,
-  selectedCategory
+  selectedCategory,
+  post
 });
 
 export default rootReducer;
