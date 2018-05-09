@@ -8,7 +8,8 @@ import {
   REQUEST_POSTS,
   RECEIVE_POSTS,
   REQUEST_POST,
-  RECEIVE_POST
+  RECEIVE_POST,
+  SORT_POSTS_BY
 } from "../actions";
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
     names: []
   },
   category: "",
+  sortBy: "",
   posts: {
     isFetching: false,
     didInvalidate: false,
@@ -96,10 +98,20 @@ function post(state = initialState.currentPost, action) {
   }
 }
 
+function sortBy(state = initialState.sortBy, action) {
+  switch (action.type) {
+    case SORT_POSTS_BY:
+      return action.sortBy;
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
   categories,
   postsByCategory,
   selectedCategory,
+  sortBy,
   post
 });
 

@@ -14,6 +14,8 @@ export const RECEIVE_POSTS = "RECEIVE_POSTS";
 export const REQUEST_POST = "REQUEST_POST";
 export const RECEIVE_POST = "RECEIVE_POST";
 
+export const SORT_POSTS_BY = "SORT_POSTS_BY";
+
 export function selectCategory(category) {
   return {
     type: SELECT_CATEGORY,
@@ -146,5 +148,12 @@ export function fetchPost(id) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receivePost(id, data)));
+  };
+}
+
+export function sortPostsBy(sortBy) {
+  return {
+    type: SORT_POSTS_BY,
+    sortBy
   };
 }

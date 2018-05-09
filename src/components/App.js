@@ -9,7 +9,13 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={HomePage} />
+          <Route exact path="/sort/:sortby" component={HomePage} />
           <Route exact path="/cat/:category" component={HomePage} />
+          <Route
+            exact
+            path="/cat/:category/sort/:sortby"
+            component={HomePage}
+          />
           <Route exact path="/cat/:category/post/:postid" component={Post} />
         </Switch>
       </BrowserRouter>
