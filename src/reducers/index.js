@@ -9,7 +9,10 @@ import {
   RECEIVE_POSTS,
   REQUEST_POST,
   RECEIVE_POST,
-  SORT_POSTS_BY
+  VOTE_POST,
+  SORT_POSTS_BY,
+  RECEIVE_COMMENTS,
+  REQUEST_COMMENTS
 } from "../actions";
 
 const initialState = {
@@ -17,20 +20,22 @@ const initialState = {
     isFetching: false,
     names: []
   },
-  category: "",
+  selectedCategory: "",
   sortBy: "",
   posts: {
     isFetching: false,
     didInvalidate: false,
     items: []
   },
-  currentPost: {
+  post: {
     isFetching: false,
-    post: {}
+    post: {},
+    isFetchingComments: false,
+    comments: []
   }
 };
 
-function selectedCategory(state = initialState.category, action) {
+function selectedCategory(state = initialState.selectedCategory, action) {
   switch (action.type) {
     case SELECT_CATEGORY:
       return action.category;
@@ -87,12 +92,21 @@ function postsByCategory(state = {}, action) {
   }
 }
 
-function post(state = initialState.currentPost, action) {
+function post(state = initialState.post, action) {
   switch (action.type) {
     case REQUEST_POST:
       return Object.assign({}, state, { isFetching: true });
     case RECEIVE_POST:
       return Object.assign({}, state, { isFetching: false, post: action.data });
+    case REQUEST_COMMENTS:
+      return Object.assign({}, state, { isFetchingComments: true });
+    case RECEIVE_COMMENTS:
+      return Object.assign({}, state, {
+        isFetchingComments: false,
+        comments: action.data
+      });
+    case VOTE_POST:
+      return Object.assign({}, state, { post: action.data });
     default:
       return state;
   }
