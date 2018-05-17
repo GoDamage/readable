@@ -2,19 +2,13 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {
-  fetchPostsIfNeeded,
-  fetchCategories,
-  selectCategory,
-  sortPostsBy
-} from "../actions";
+import Timestamp from "react-timestamp";
+import { fetchPosts, selectCategory, sortPostsBy, votePost } from "../actions";
 import doSortPosts from "../utils";
-import PostList from "./PostList";
+import Header from "./Header";
 
 class HomePage extends Component {
   static propTypes = {
-    isFetchingCategories: PropTypes.bool.isRequired,
-    categoryNames: PropTypes.array.isRequired,
     posts: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.number,
@@ -25,10 +19,9 @@ class HomePage extends Component {
     const { dispatch } = this.props;
     const category = this.props.match.params.category || "all";
     const sortBy = this.props.match.params.sortby || null;
-    dispatch(fetchCategories());
     dispatch(selectCategory(category));
     dispatch(sortPostsBy(sortBy));
-    dispatch(fetchPostsIfNeeded(category));
+    dispatch(fetchPosts(category));
   }
 
   componentDidUpdate(prevProps) {
@@ -38,7 +31,7 @@ class HomePage extends Component {
 
     if (category !== prevProps.selectedCategory) {
       dispatch(selectCategory(category));
-      dispatch(fetchPostsIfNeeded(category));
+      dispatch(fetchPosts(category));
     }
     if (sortBy !== prevProps.sortBy) {
       dispatch(sortPostsBy(sortBy));
@@ -46,36 +39,58 @@ class HomePage extends Component {
   }
 
   render() {
-    const { categoryNames, selectedCategory, posts } = this.props;
+    const { selectedCategory, posts, dispatch } = this.props;
 
     return (
       <div className="homepage">
-        <div className="header">
-          <h1>
-            <Link to="/">Readable</Link>
-          </h1>
-          <ul className="menu">
-            {categoryNames.map(category => (
-              <li key={category.path}>
-                <Link to={`/cat/${category.path}`}>{category.name}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Header />
         <p>
-          Order by: <Link to={`/cat/${selectedCategory}/sort/best`}>Best</Link>
-          <Link to={`/cat/${selectedCategory}/sort/new`}>New</Link>
+          Order by: <Link to={`/${selectedCategory}/sort/best`}>Best</Link>
+          <Link to={`/${selectedCategory}/sort/new`}>New</Link>
         </p>
-        <PostList posts={posts} />
+        <ul className="posts">
+          {posts.map(post => (
+            <li className="post-teaser" key={post.id}>
+              <div className="post-teaser__vote">
+                <button
+                  onClick={() =>
+                    dispatch(votePost(post.id, "upVote", selectedCategory))
+                  }
+                >
+                  &#9650;
+                </button>
+                <strong>{post.voteScore}</strong>
+                <button
+                  onClick={() =>
+                    dispatch(votePost(post.id, "downVote", selectedCategory))
+                  }
+                >
+                  &#9660;
+                </button>
+              </div>
+              <div className="post-teaser__content">
+                <h2>
+                  <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
+                </h2>
+                <span className="post-teaser__author-details">
+                  Posted by <strong>{post.author}</strong>,
+                  <Timestamp time={post.timestamp / 1000} precision={3} />
+                </span>
+                <p>{post.body}</p>
+                <span className="post-teaser__comment-count">
+                  {post.commentCount} comments
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { categories, postsByCategory, selectedCategory, sortBy } = state;
-  const isFetchingCategories = categories["isFetching"] || true;
-  const categoryNames = categories["names"] || {};
+  const { postsByCategory, selectedCategory, sortBy } = state;
   const { isFetching, lastUpdated, items } = postsByCategory[
     selectedCategory
   ] || {
@@ -87,8 +102,6 @@ function mapStateToProps(state) {
   const posts = doSortPosts(sortBy, items) || [];
 
   return {
-    isFetchingCategories,
-    categoryNames,
     selectedCategory,
     posts,
     isFetching,

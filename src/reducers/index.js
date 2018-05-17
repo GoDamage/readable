@@ -12,7 +12,8 @@ import {
   VOTE_POST,
   SORT_POSTS_BY,
   RECEIVE_COMMENTS,
-  REQUEST_COMMENTS
+  REQUEST_COMMENTS,
+  VOTE_COMMENT
 } from "../actions";
 
 const initialState = {
@@ -74,6 +75,12 @@ function posts(state = initialState.posts, action) {
         items: action.posts,
         lastUpdated: action.receivedAt
       });
+    case VOTE_POST:
+      return Object.assign({}, state, {
+        items: state.items.map(
+          item => (item.id === action.id ? action.data : item)
+        )
+      });
     default:
       return state;
   }
@@ -84,6 +91,7 @@ function postsByCategory(state = {}, action) {
     case INVALIDATE_CATEGORY:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
+    case VOTE_POST:
       return Object.assign({}, state, {
         [action.category]: posts(state[action.category], action)
       });
@@ -107,6 +115,12 @@ function post(state = initialState.post, action) {
       });
     case VOTE_POST:
       return Object.assign({}, state, { post: action.data });
+    case VOTE_COMMENT:
+      return Object.assign({}, state, {
+        comments: state.comments.map(
+          comment => (comment.id === action.id ? action.data : comment)
+        )
+      });
     default:
       return state;
   }

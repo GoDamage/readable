@@ -48,13 +48,41 @@ a {
   list-style: none;
 }
 
-.post {
-  padding: 1em 2em;
-  margin-bottom: 2em;
+.post__detail,
+.post-teaser,
+.comment {
+  display: flex;
+  padding: 1em;
+  margin: 2em;
   background-color: #eee9d1;
   border-radius: 0.5em;
 }
 
-.post h2 {
+.post__vote,
+.post-teaser__vote,
+.comment__vote {
+  display: flex;
+  flex-direction: column;
+  padding-right: 1em;
+  text-align: center;
+}
+
+.post__vote button,
+.post-teaser__vote button {
+  margin: 0.5em 0;
+}
+
+.post h2,
+.posts h2 {
   margin-top: 0.25em;
+  margin-bottom: 0.5em;
+}
+
+.post__author-details,
+.post-teaser__author-details {
+  font-size: 0.8em;
+}
+
+.comment__author {
+  margin-top: 0;
 }

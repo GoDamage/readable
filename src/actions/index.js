@@ -13,6 +13,7 @@ export const SORT_POSTS_BY = "SORT_POSTS_BY";
 
 export const REQUEST_COMMENTS = "REQUEST_COMMENTS";
 export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
+export const VOTE_COMMENT = "VOTE_COMMENT";
 
 const headers = {
   Authorization: "qwertyuiop",
@@ -51,18 +52,15 @@ export function fetchCategories() {
   return dispatch => {
     dispatch(requestCategories());
 
-    return (
-      fetch("http://localhost:3001/categories", {
-        method: "GET",
-        headers: headers
-      })
-        .then(
-          res => res.json(),
-          error => console.log("An error occurred.", error)
-        )
-        //.then(data => console.log(data));
-        .then(data => dispatch(receiveCategories(data)))
-    );
+    return fetch("http://localhost:3001/categories", {
+      method: "GET",
+      headers: headers
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveCategories(data)));
   };
 }
 
@@ -155,17 +153,17 @@ export function fetchPost(id) {
   };
 }
 
-function receiveVote(id, data) {
+function receiveVote(id, data, category) {
   return {
     type: VOTE_POST,
     id,
-    data
+    data,
+    category
   };
 }
 
-export function votePost(id, vote) {
+export function votePost(id, vote, category = "all") {
   const voteBody = JSON.stringify({ option: vote });
-  console.log(voteBody);
   return dispatch => {
     return fetch(`http://localhost:3001/posts/${id}`, {
       body: voteBody,
@@ -176,7 +174,7 @@ export function votePost(id, vote) {
         res => res.json(),
         error => console.log("An error occurred.", error)
       )
-      .then(data => dispatch(receiveVote(id, data)));
+      .then(data => dispatch(receiveVote(id, data, category)));
   };
 }
 
@@ -216,5 +214,30 @@ export function fetchComments(postid) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receiveComments(postid, data)));
+  };
+}
+
+function receiveVoteComment(id, data, category) {
+  return {
+    type: VOTE_COMMENT,
+    id,
+    data,
+    category
+  };
+}
+
+export function voteComment(id, vote) {
+  const voteBody = JSON.stringify({ option: vote });
+  return dispatch => {
+    return fetch(`http://localhost:3001/comments/${id}`, {
+      body: voteBody,
+      method: "POST",
+      headers: headers
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveVoteComment(id, data)));
   };
 }
