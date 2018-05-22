@@ -80,6 +80,9 @@ class HomePage extends Component {
                 <span className="post-teaser__comment-count">
                   {post.commentCount} comments
                 </span>
+                <span className="post-teaser__edit-actions">
+                  <Link to={`/${post.category}/${post.id}/edit`}>Edit</Link>
+                </span>
               </div>
             </li>
           ))}

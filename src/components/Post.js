@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { fetchPost, fetchComments, votePost, voteComment } from "../actions";
@@ -43,6 +44,9 @@ class Post extends Component {
               <Timestamp time={post.timestamp / 1000} />
             </span>
             <p>{post.body}</p>
+            <span className="post__edit-actions">
+              <Link to={`/${post.category}/${post.id}/edit`}>Edit</Link>
+            </span>
           </div>
         </div>
 

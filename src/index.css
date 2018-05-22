@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Bitter|Raleway");
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -85,4 +89,17 @@ a {
 
 .comment__author {
   margin-top: 0;
+}
+
+.edit-post__form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.edit-post__form input,
+.edit-post__form textarea {
+  width: 100%;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
 }

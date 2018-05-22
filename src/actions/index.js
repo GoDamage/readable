@@ -15,6 +15,11 @@ export const REQUEST_COMMENTS = "REQUEST_COMMENTS";
 export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
 export const VOTE_COMMENT = "VOTE_COMMENT";
 
+export const EDIT_POST = "EDIT_POST";
+export const EDIT_COMMENT = "EDIT_COMMENT";
+
+const api_url = "http://localhost:3001";
+
 const headers = {
   Authorization: "qwertyuiop",
   "Content-Type": "application/json",
@@ -52,7 +57,7 @@ export function fetchCategories() {
   return dispatch => {
     dispatch(requestCategories());
 
-    return fetch("http://localhost:3001/categories", {
+    return fetch(`${api_url}/categories`, {
       method: "GET",
       headers: headers
     })
@@ -85,9 +90,7 @@ export function fetchPosts(category) {
     dispatch(requestPosts(category));
 
     const url =
-      category !== "all"
-        ? `http://localhost:3001/${category}/posts`
-        : "http://localhost:3001/posts";
+      category !== "all" ? `${api_url}/${category}/posts` : `${api_url}/posts`;
 
     return fetch(url, {
       method: "GET",
@@ -141,7 +144,7 @@ export function fetchPost(id) {
   return dispatch => {
     dispatch(requestPost(id));
 
-    return fetch(`http://localhost:3001/posts/${id}`, {
+    return fetch(`${api_url}/posts/${id}`, {
       method: "GET",
       headers: headers
     })
@@ -165,7 +168,7 @@ function receiveVote(id, data, category) {
 export function votePost(id, vote, category = "all") {
   const voteBody = JSON.stringify({ option: vote });
   return dispatch => {
-    return fetch(`http://localhost:3001/posts/${id}`, {
+    return fetch(`${api_url}/posts/${id}`, {
       body: voteBody,
       method: "POST",
       headers: headers
@@ -201,11 +204,10 @@ function receiveComments(postid, data) {
 }
 
 export function fetchComments(postid) {
-  console.log("fetchng comments");
   return dispatch => {
     dispatch(requestComments(postid));
 
-    return fetch(`http://localhost:3001/posts/${postid}/comments`, {
+    return fetch(`${api_url}/posts/${postid}/comments`, {
       method: "GET",
       headers: headers
     })
@@ -229,7 +231,7 @@ function receiveVoteComment(id, data, category) {
 export function voteComment(id, vote) {
   const voteBody = JSON.stringify({ option: vote });
   return dispatch => {
-    return fetch(`http://localhost:3001/comments/${id}`, {
+    return fetch(`${api_url}/comments/${id}`, {
       body: voteBody,
       method: "POST",
       headers: headers
@@ -239,5 +241,30 @@ export function voteComment(id, vote) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receiveVoteComment(id, data)));
+  };
+}
+
+function receiveEditPost(id, category, data) {
+  return {
+    type: EDIT_POST,
+    id,
+    category,
+    data
+  };
+}
+
+export function editPost(id, category, post) {
+  const editBody = JSON.stringify(post);
+  return dispatch => {
+    return fetch(`${api_url}/posts/${id}`, {
+      method: "PUT",
+      headers: headers,
+      body: editBody
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveEditPost(id, category, data)));
   };
 }

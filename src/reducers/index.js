@@ -10,6 +10,7 @@ import {
   REQUEST_POST,
   RECEIVE_POST,
   VOTE_POST,
+  EDIT_POST,
   SORT_POSTS_BY,
   RECEIVE_COMMENTS,
   REQUEST_COMMENTS,
@@ -33,6 +34,11 @@ const initialState = {
     post: {},
     isFetchingComments: false,
     comments: []
+  },
+  modal: {
+    isOpen: false,
+    type: "",
+    data: {}
   }
 };
 
@@ -76,6 +82,7 @@ function posts(state = initialState.posts, action) {
         lastUpdated: action.receivedAt
       });
     case VOTE_POST:
+    case EDIT_POST:
       return Object.assign({}, state, {
         items: state.items.map(
           item => (item.id === action.id ? action.data : item)
@@ -92,6 +99,7 @@ function postsByCategory(state = {}, action) {
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
     case VOTE_POST:
+    case EDIT_POST:
       return Object.assign({}, state, {
         [action.category]: posts(state[action.category], action)
       });
@@ -114,6 +122,7 @@ function post(state = initialState.post, action) {
         comments: action.data
       });
     case VOTE_POST:
+    case EDIT_POST:
       return Object.assign({}, state, { post: action.data });
     case VOTE_COMMENT:
       return Object.assign({}, state, {
