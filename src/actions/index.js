@@ -1,5 +1,4 @@
 export const SELECT_CATEGORY = "SELECT_CATEGORY";
-export const INVALIDATE_CATEGORY = "INVALIDATE_CATEGORY";
 export const REQUEST_CATEGORIES = "REQUEST_CATEGORIES";
 export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES";
 
@@ -35,13 +34,6 @@ const headers = {
 export function selectCategory(category) {
   return {
     type: SELECT_CATEGORY,
-    category
-  };
-}
-
-export function invalidateCategory(category) {
-  return {
-    type: INVALIDATE_CATEGORY,
     category
   };
 }
@@ -107,27 +99,6 @@ export function fetchPosts(category) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receivePosts(category, data)));
-  };
-}
-
-function shouldFetchPosts(state, category) {
-  const posts = state.postsByCategory[category];
-  if (!posts) {
-    return true;
-  } else if (posts.isFetching) {
-    return false;
-  } else {
-    return posts.didInvalidate;
-  }
-}
-
-export function fetchPostsIfNeeded(category) {
-  return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), category)) {
-      return dispatch(fetchPosts(category));
-    } else {
-      return Promise.resolve();
-    }
   };
 }
 

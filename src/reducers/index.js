@@ -2,7 +2,6 @@ import { combineReducers } from "redux";
 
 import {
   SELECT_CATEGORY,
-  INVALIDATE_CATEGORY,
   REQUEST_CATEGORIES,
   RECEIVE_CATEGORIES,
   REQUEST_POSTS,
@@ -33,7 +32,6 @@ const initialState = {
   sortBy: "",
   posts: {
     isFetching: false,
-    didInvalidate: false,
     items: []
   },
   post: {
@@ -78,8 +76,6 @@ function categories(state = initialState.categories, action) {
 
 function posts(state = initialState.posts, action) {
   switch (action.type) {
-    case INVALIDATE_CATEGORY:
-      return Object.assign({}, state, { didInvalidate: true });
     case REQUEST_POSTS:
       return Object.assign({}, state, {
         isFetching: true,
@@ -112,7 +108,6 @@ function posts(state = initialState.posts, action) {
 
 function postsByCategory(state = {}, action) {
   switch (action.type) {
-    case INVALIDATE_CATEGORY:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
     case VOTE_POST:
