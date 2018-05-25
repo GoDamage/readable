@@ -8,6 +8,7 @@ export const RECEIVE_POSTS = "RECEIVE_POSTS";
 export const REQUEST_POST = "REQUEST_POST";
 export const RECEIVE_POST = "RECEIVE_POST";
 export const VOTE_POST = "VOTE_POST";
+export const DELETE_POST = "DELETE_POST";
 
 export const SORT_POSTS_BY = "SORT_POSTS_BY";
 
@@ -16,6 +17,7 @@ export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
 export const REQUEST_COMMENT = "REQUEST_COMMENT";
 export const RECEIVE_COMMENT = "RECEIVE_COMMENT";
 export const VOTE_COMMENT = "VOTE_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
 
 export const EDIT_POST = "EDIT_POST";
 export const NEW_POST = "NEW_POST";
@@ -325,6 +327,29 @@ export function newPost(category, post) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receiveNewPost(category, data)));
+  };
+}
+
+function receiveDeletePost(category, data) {
+  return {
+    type: DELETE_POST,
+    category,
+    data
+  };
+}
+
+export function deletePost(id, category) {
+  console.log(id, category);
+  return dispatch => {
+    return fetch(`${api_url}/posts/${id}`, {
+      method: "DELETE",
+      headers: headers
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveDeletePost(category, data)));
   };
 }
 

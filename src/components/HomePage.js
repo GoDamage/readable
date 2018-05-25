@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
-import { fetchPosts, selectCategory, sortPostsBy, votePost } from "../actions";
+import {
+  fetchPosts,
+  selectCategory,
+  sortPostsBy,
+  votePost,
+  deletePost
+} from "../actions";
 import doSortPosts from "../utils";
 import Header from "./Header";
 
@@ -104,6 +110,14 @@ class HomePage extends Component {
                   >
                     Edit
                   </Link>
+                  <button
+                    className="button"
+                    onClick={() =>
+                      dispatch(deletePost(post.id, selectedCategory))
+                    }
+                  >
+                    Delete
+                  </button>
                 </span>
               </div>
             </li>
