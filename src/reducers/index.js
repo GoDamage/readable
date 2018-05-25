@@ -11,6 +11,7 @@ import {
   RECEIVE_POST,
   VOTE_POST,
   EDIT_POST,
+  NEW_POST,
   SORT_POSTS_BY,
   RECEIVE_COMMENTS,
   REQUEST_COMMENTS,
@@ -88,6 +89,8 @@ function posts(state = initialState.posts, action) {
           item => (item.id === action.id ? action.data : item)
         )
       });
+    case NEW_POST:
+      return [...state.items, action.data];
     default:
       return state;
   }
@@ -100,6 +103,7 @@ function postsByCategory(state = {}, action) {
     case REQUEST_POSTS:
     case VOTE_POST:
     case EDIT_POST:
+    case NEW_POST:
       return Object.assign({}, state, {
         [action.category]: posts(state[action.category], action)
       });

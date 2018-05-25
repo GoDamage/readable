@@ -44,10 +44,20 @@ class HomePage extends Component {
     return (
       <div className="homepage">
         <Header />
-        <p>
-          Order by: <Link to={`/${selectedCategory}/sort/best`}>Best</Link>
-          <Link to={`/${selectedCategory}/sort/new`}>New</Link>
-        </p>
+        <div className="main-actions">
+          <div className="main-actions__order">
+            <span>Order by:</span>
+            <Link className="button" to={`/${selectedCategory}/sort/best`}>
+              Best
+            </Link>
+            <Link className="button" to={`/${selectedCategory}/sort/new`}>
+              New
+            </Link>
+          </div>
+          <Link className="main-actions__new button" to={"/new"}>
+            New Post
+          </Link>
+        </div>
         <ul className="posts">
           {posts.map(post => (
             <li className="post-teaser" key={post.id}>
@@ -81,7 +91,12 @@ class HomePage extends Component {
                   {post.commentCount} comments
                 </span>
                 <span className="post-teaser__edit-actions">
-                  <Link to={`/${post.category}/${post.id}/edit`}>Edit</Link>
+                  <Link
+                    className="button"
+                    to={`/${post.category}/${post.id}/edit`}
+                  >
+                    Edit
+                  </Link>
                 </span>
               </div>
             </li>

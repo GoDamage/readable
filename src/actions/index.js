@@ -16,6 +16,7 @@ export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
 export const VOTE_COMMENT = "VOTE_COMMENT";
 
 export const EDIT_POST = "EDIT_POST";
+export const NEW_POST = "NEW_POST";
 export const EDIT_COMMENT = "EDIT_COMMENT";
 
 const api_url = "http://localhost:3001";
@@ -266,5 +267,29 @@ export function editPost(id, category, post) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receiveEditPost(id, category, data)));
+  };
+}
+
+function receiveNewPost(category, data) {
+  return {
+    type: NEW_POST,
+    category,
+    data
+  };
+}
+
+export function newPost(category, post) {
+  const postBody = JSON.stringify(post);
+  return dispatch => {
+    return fetch(`${api_url}/posts`, {
+      method: "POST",
+      headers: headers,
+      body: postBody
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveNewPost(category, data)));
   };
 }
