@@ -79,8 +79,8 @@ class PostForm extends Component {
     };
 
     return (
-      <div className="post__detail">
-        <form className="edit-post__form" onSubmit={handleSubmit}>
+      <div className="edit-form">
+        <form className="edit__form" onSubmit={handleSubmit}>
           <label>
             Title<input
               type="text"

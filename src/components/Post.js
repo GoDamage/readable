@@ -23,9 +23,12 @@ class Post extends Component {
 
   render() {
     const { post, comments, dispatch } = this.props;
+    const { category } = this.props.match.params;
+
     return (
       <div className="post">
         <Header />
+        <h2 className="page-title">{category}</h2>
         <div className="post__detail">
           <div className="post__vote">
             <button onClick={() => dispatch(votePost(post.id, "upVote"))}>
@@ -45,7 +48,9 @@ class Post extends Component {
             </span>
             <p>{post.body}</p>
             <span className="post__edit-actions">
-              <Link to={`/${post.category}/${post.id}/edit`}>Edit</Link>
+              <Link className="button" to={`/${post.category}/${post.id}/edit`}>
+                Edit
+              </Link>
             </span>
           </div>
         </div>
@@ -71,11 +76,23 @@ class Post extends Component {
                 <p className="comment__author">
                   <strong>{comment.author}</strong>
                 </p>
-                {comment.body}
+                <p>{comment.body}</p>
+                <Link
+                  className="button"
+                  to={`/${post.category}/${post.id}/${comment.id}/edit`}
+                >
+                  Edit
+                </Link>
               </div>
             </li>
           ))}
         </ul>
+        <Link
+          className="button"
+          to={`/${post.category}/${post.id}/new-comment`}
+        >
+          New comment
+        </Link>
       </div>
     );
   }

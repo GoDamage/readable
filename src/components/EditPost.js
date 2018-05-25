@@ -32,6 +32,7 @@ class EditPost extends Component {
     return (
       <div className="edit-post">
         <Header />
+        <h2 className="page-title">{isNew ? "New" : "Edit"} Post</h2>
         {form}
       </div>
     );

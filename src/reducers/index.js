@@ -15,6 +15,10 @@ import {
   SORT_POSTS_BY,
   RECEIVE_COMMENTS,
   REQUEST_COMMENTS,
+  RECEIVE_COMMENT,
+  REQUEST_COMMENT,
+  EDIT_COMMENT,
+  NEW_COMMENT,
   VOTE_COMMENT
 } from "../actions";
 
@@ -35,6 +39,10 @@ const initialState = {
     post: {},
     isFetchingComments: false,
     comments: []
+  },
+  comment: {
+    isFetching: false,
+    comment: {}
   },
   modal: {
     isOpen: false,
@@ -129,11 +137,32 @@ function post(state = initialState.post, action) {
     case EDIT_POST:
       return Object.assign({}, state, { post: action.data });
     case VOTE_COMMENT:
+    case EDIT_COMMENT:
       return Object.assign({}, state, {
         comments: state.comments.map(
           comment => (comment.id === action.id ? action.data : comment)
         )
       });
+    case NEW_COMMENT:
+      return Object.assign({}, state, {
+        comments: [...state.comments, action.data]
+      });
+    default:
+      return state;
+  }
+}
+
+function comment(state = initialState.comment, action) {
+  switch (action.type) {
+    case REQUEST_COMMENT:
+      return Object.assign({}, state, { isFetching: true });
+    case RECEIVE_COMMENT:
+      return Object.assign({}, state, {
+        isFetching: false,
+        comment: action.data
+      });
+    case EDIT_COMMENT:
+      return Object.assign({}, state, { comment: {} });
     default:
       return state;
   }
@@ -153,7 +182,8 @@ const rootReducer = combineReducers({
   postsByCategory,
   selectedCategory,
   sortBy,
-  post
+  post,
+  comment
 });
 
 export default rootReducer;

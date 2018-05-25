@@ -44,8 +44,18 @@ a {
   list-style: none;
 }
 
+.page-title {
+  padding: 0.5em 2em;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.page-title__sub {
+  font-size: 0.75em;
+}
+
 .posts {
-  padding: 2em;
+  padding: 0 2em;
 }
 
 .posts > li {
@@ -54,10 +64,11 @@ a {
 
 .post__detail,
 .post-teaser,
-.comment {
+.comment,
+.edit-form {
   display: flex;
   padding: 1em;
-  margin: 2em;
+  margin: 0 2em 2em;
   background-color: #eee9d1;
   border-radius: 0.5em;
 }
@@ -76,6 +87,10 @@ a {
   margin: 0.5em 0;
 }
 
+.post {
+  margin-bottom: 3em;
+}
+
 .post h2,
 .posts h2 {
   margin-top: 0.25em;
@@ -91,14 +106,14 @@ a {
   margin-top: 0;
 }
 
-.edit-post__form {
+.edit__form {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.edit-post__form input,
-.edit-post__form textarea {
+.edit__form input,
+.edit__form textarea {
   width: 100%;
   margin-top: 0.5em;
   margin-bottom: 1em;

@@ -13,11 +13,14 @@ export const SORT_POSTS_BY = "SORT_POSTS_BY";
 
 export const REQUEST_COMMENTS = "REQUEST_COMMENTS";
 export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
+export const REQUEST_COMMENT = "REQUEST_COMMENT";
+export const RECEIVE_COMMENT = "RECEIVE_COMMENT";
 export const VOTE_COMMENT = "VOTE_COMMENT";
 
 export const EDIT_POST = "EDIT_POST";
 export const NEW_POST = "NEW_POST";
 export const EDIT_COMMENT = "EDIT_COMMENT";
+export const NEW_COMMENT = "NEW_COMMENT";
 
 const api_url = "http://localhost:3001";
 
@@ -220,6 +223,37 @@ export function fetchComments(postid) {
   };
 }
 
+function requestComment(id) {
+  return {
+    type: REQUEST_COMMENT,
+    id
+  };
+}
+
+function receiveComment(id, data) {
+  return {
+    type: RECEIVE_COMMENT,
+    id,
+    data
+  };
+}
+
+export function fetchComment(id) {
+  return dispatch => {
+    dispatch(requestComment(id));
+
+    return fetch(`${api_url}/comments/${id}`, {
+      method: "GET",
+      headers: headers
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveComment(id, data)));
+  };
+}
+
 function receiveVoteComment(id, data, category) {
   return {
     type: VOTE_COMMENT,
@@ -291,5 +325,52 @@ export function newPost(category, post) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receiveNewPost(category, data)));
+  };
+}
+
+function receiveEditComment(id, data) {
+  return {
+    type: EDIT_COMMENT,
+    id,
+    data
+  };
+}
+
+export function editComment(id, comment) {
+  const editBody = JSON.stringify(comment);
+  return dispatch => {
+    return fetch(`${api_url}/comments/${id}`, {
+      method: "PUT",
+      headers: headers,
+      body: editBody
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveEditComment(id, data)));
+  };
+}
+
+function receiveNewComment(data) {
+  return {
+    type: NEW_COMMENT,
+    data
+  };
+}
+
+export function newComment(comment) {
+  const commentBody = JSON.stringify(comment);
+  return dispatch => {
+    return fetch(`${api_url}/comments`, {
+      method: "POST",
+      headers: headers,
+      body: commentBody
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveNewComment(data)));
   };
 }

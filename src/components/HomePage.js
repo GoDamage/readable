@@ -40,6 +40,7 @@ class HomePage extends Component {
 
   render() {
     const { selectedCategory, posts, dispatch } = this.props;
+    const sortBy = this.props.match.params.sortby || null;
 
     return (
       <div className="homepage">
@@ -58,6 +59,12 @@ class HomePage extends Component {
             New Post
           </Link>
         </div>
+        <h2 className="page-title">
+          {selectedCategory}{" "}
+          {sortBy && (
+            <span className="page-title__sub">- sorted by {sortBy}</span>
+          )}
+        </h2>
         <ul className="posts">
           {posts.map(post => (
             <li className="post-teaser" key={post.id}>
