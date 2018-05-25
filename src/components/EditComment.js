@@ -109,7 +109,15 @@ class EditComment extends Component {
                   />
                 </label>
               ) : null}
-              <input type="submit" value="submit" />
+              <div className="form-actions">
+                <input className="button" type="submit" value="submit" />
+                <button
+                  className="button"
+                  onClick={() => this.props.history.goBack}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         )}

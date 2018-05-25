@@ -119,6 +119,12 @@ a {
   margin-bottom: 1em;
 }
 
+.form-actions .button {
+  width: auto;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
 .main-actions {
   display: flex;
   flex-wrap: nowrap;

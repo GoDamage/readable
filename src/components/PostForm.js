@@ -13,6 +13,15 @@ class PostForm extends Component {
     author: ""
   };
 
+  static propTypes = {
+    post: PropTypes.object.isRequired,
+    isNew: PropTypes.bool.isRequired,
+    categoryNames: PropTypes.array.isRequired,
+    isFetchingCategories: PropTypes.bool.isRequired,
+    submitEditPost: PropTypes.func.isRequired,
+    submitNewPost: PropTypes.func.isRequired
+  };
+
   componentDidMount() {
     const { post, isNew } = this.props;
 
@@ -78,6 +87,15 @@ class PostForm extends Component {
       }
     };
 
+    const handleCancel = () => {
+      const { isNew } = this.props;
+      if (isNew) {
+        this.props.history.push("/");
+      } else {
+        this.props.history.goBack;
+      }
+    };
+
     return (
       <div className="edit-form">
         <form className="edit__form" onSubmit={handleSubmit}>
@@ -133,7 +151,12 @@ class PostForm extends Component {
             </label>
           )}
 
-          <input type="submit" value="submit" />
+          <div className="form-actions">
+            <input className="button" type="submit" value="submit" />
+            <button className="button" onClick={() => handleCancel()}>
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     );
