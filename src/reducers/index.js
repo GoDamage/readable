@@ -20,7 +20,8 @@ import {
   REQUEST_COMMENT,
   EDIT_COMMENT,
   NEW_COMMENT,
-  VOTE_COMMENT
+  VOTE_COMMENT,
+  DELETE_COMMENT
 } from "../actions";
 
 const initialState = {
@@ -100,7 +101,7 @@ function posts(state = initialState.posts, action) {
       });
     case DELETE_POST:
       return Object.assign({}, state, {
-        items: state.items.filter(item => item.id === action.id)
+        items: state.items.filter(item => item.id !== action.data.id)
       });
     case NEW_POST:
       return [...state.items, action.data];
@@ -142,6 +143,10 @@ function post(state = initialState.post, action) {
     case VOTE_POST:
     case EDIT_POST:
       return Object.assign({}, state, { post: action.data });
+    case DELETE_POST:
+      return Object.assign({}, state, {
+        post: initialState.post.id === action.data.id ? {} : initialState.post
+      });
     case VOTE_COMMENT:
     case EDIT_COMMENT:
       return Object.assign({}, state, {
@@ -152,6 +157,12 @@ function post(state = initialState.post, action) {
     case NEW_COMMENT:
       return Object.assign({}, state, {
         comments: [...state.comments, action.data]
+      });
+    case DELETE_COMMENT:
+      return Object.assign({}, state, {
+        comments: state.comments.filter(
+          comment => comment.id !== action.data.id
+        )
       });
     default:
       return state;

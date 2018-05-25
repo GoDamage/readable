@@ -339,7 +339,6 @@ function receiveDeletePost(category, data) {
 }
 
 export function deletePost(id, category) {
-  console.log(id, category);
   return dispatch => {
     return fetch(`${api_url}/posts/${id}`, {
       method: "DELETE",
@@ -397,5 +396,26 @@ export function newComment(comment) {
         error => console.log("An error occurred.", error)
       )
       .then(data => dispatch(receiveNewComment(data)));
+  };
+}
+
+function receiveDeleteComment(data) {
+  return {
+    type: DELETE_COMMENT,
+    data
+  };
+}
+
+export function deleteComment(id) {
+  return dispatch => {
+    return fetch(`${api_url}/comments/${id}`, {
+      method: "DELETE",
+      headers: headers
+    })
+      .then(
+        res => res.json(),
+        error => console.log("An error occurred.", error)
+      )
+      .then(data => dispatch(receiveDeleteComment(data)));
   };
 }
