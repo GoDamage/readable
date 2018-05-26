@@ -1,4 +1,4 @@
-import { SELECT_CATEGORY } from "../actions";
+import { SELECT_CATEGORY } from "../actions/types";
 
 const initialState = { selectedCategory: "" };
 

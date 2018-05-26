@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import uuid from "uuid";
-import { fetchComment, editComment, newComment } from "../actions";
+import * as commentActions from "../actions/comment";
 import Header from "./Header";
 
 class EditComment extends Component {
@@ -15,16 +15,17 @@ class EditComment extends Component {
   static propTypes = {
     isFetching: PropTypes.bool.isRequired,
     comment: PropTypes.object.isRequired,
-    doFetchComment: PropTypes.func.isRequired,
-    submitEditComment: PropTypes.func.isRequired,
-    submitNewComment: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    fetchComment: PropTypes.func.isRequired,
+    editComment: PropTypes.func.isRequired,
+    newComment: PropTypes.func.isRequired
   };
 
   componentWillMount() {
-    const { doFetchComment } = this.props;
+    const { dispatch, fetchComment } = this.props;
     const commentId = this.props.match.params.commentid;
     if (commentId) {
-      doFetchComment(commentId);
+      dispatch(fetchComment(commentId));
     }
   }
 
@@ -53,7 +54,7 @@ class EditComment extends Component {
       e.preventDefault();
 
       const { body, author } = this.state;
-      const { submitEditComment, submitNewComment } = this.props;
+      const { dispatch, editComment, newComment } = this.props;
       const { postid, commentid, category } = this.props.match.params;
 
       if (isNew) {
@@ -67,14 +68,14 @@ class EditComment extends Component {
           parentId: postid
         };
 
-        submitNewComment(comment);
+        dispatch(newComment(comment));
       } else {
         const comment = {
           timestamp: Date.now(),
           body: body
         };
 
-        submitEditComment(commentid, comment);
+        dispatch(editComment(commentid, comment));
       }
 
       this.props.history.push(`/${category}/${postid}`);
@@ -131,18 +132,9 @@ function mapStateToProps(state) {
   return { isFetching, comment };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    doFetchComment: id => {
-      dispatch(fetchComment(id));
-    },
-    submitNewComment: data => {
-      dispatch(newComment(data));
-    },
-    submitEditComment: (id, data) => {
-      dispatch(editComment(id, data));
-    }
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  ...commentActions
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditComment);

@@ -1,4 +1,4 @@
-import { SORT_POSTS_BY } from "../actions";
+import { SORT_POSTS_BY } from "../actions/types";
 
 const initialState = {
   sortBy: ""

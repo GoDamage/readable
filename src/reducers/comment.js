@@ -1,4 +1,8 @@
-import { RECEIVE_COMMENT, REQUEST_COMMENT, EDIT_COMMENT } from "../actions";
+import {
+  RECEIVE_COMMENT,
+  REQUEST_COMMENT,
+  EDIT_COMMENT
+} from "../actions/types";
 
 const initialState = {
   comment: {

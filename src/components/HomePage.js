@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Timestamp from "react-timestamp";
-import {
+/*import {
   fetchPosts,
   selectCategory,
   sortPostsBy,
   votePost,
   deletePost
-} from "../actions";
+} from "../actions";*/
+import * as postActions from "../actions/post";
+import * as categoryActions from "../actions/category";
 import doSortPosts from "../utils";
 import Header from "./Header";
 
@@ -18,11 +20,16 @@ class HomePage extends Component {
     posts: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.number,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    fetchPosts: PropTypes.func.isRequired,
+    selectCategory: PropTypes.func.isRequired,
+    sortPostsBy: PropTypes.func.isRequired,
+    votePost: PropTypes.func.isRequired,
+    deletePost: PropTypes.func.isRequired
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, selectCategory, sortPostsBy, fetchPosts } = this.props;
     const category = this.props.match.params.category || "all";
     const sortBy = this.props.match.params.sortby || null;
     dispatch(selectCategory(category));
@@ -31,7 +38,7 @@ class HomePage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { dispatch } = this.props;
+    const { dispatch, selectCategory, fetchPosts, sortPostsBy } = this.props;
     const category = this.props.match.params.category || "all";
     const sortBy = this.props.match.params.sortby || null;
 
@@ -45,7 +52,13 @@ class HomePage extends Component {
   }
 
   render() {
-    const { selectedCategory, posts, dispatch } = this.props;
+    const {
+      selectedCategory,
+      posts,
+      dispatch,
+      votePost,
+      deletePost
+    } = this.props;
     const sortBy = this.props.match.params.sortby || null;
 
     return (
@@ -149,4 +162,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(HomePage);
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    ...postActions,
+    ...categoryActions
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
