@@ -100,7 +100,7 @@ function posts(state = initialState.posts, action) {
         items: state.items.filter(item => item.id !== action.data.id)
       });
     case NEW_POST:
-      return [...state.items, action.data];
+      return Object.assign({}, state, { items: [...state.items, action.data] });
     default:
       return state;
   }

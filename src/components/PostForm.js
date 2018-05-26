@@ -92,7 +92,7 @@ class PostForm extends Component {
       if (isNew) {
         this.props.history.push("/");
       } else {
-        this.props.history.goBack;
+        this.props.history.goBack();
       }
     };
 
