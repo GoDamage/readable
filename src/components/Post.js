@@ -38,6 +38,7 @@ class Post extends Component {
       <div className="fourohfour">
         <h2 className="page-title">404</h2>
         <p>Nothing to see here</p>
+        <Link to="/">Return to the homepage</Link>
       </div>
     );
 
